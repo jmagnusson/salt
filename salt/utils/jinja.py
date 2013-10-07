@@ -333,3 +333,14 @@ class SerializerExtension(Extension, object):
                 .set_lineno(lineno)
             ).set_lineno(lineno)
         ]
+
+
+def finalize(var):
+    """A callable to process the result of a variable expression
+    Pass to jinja2.Environment().finalize
+    """
+    if var.__class__.__name__ == 'OrderedDict':
+        var = dict(var)
+        for k, v in var.items():
+            var[k] = finalize(v)
+    return var

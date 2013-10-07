@@ -23,6 +23,7 @@ import salt.utils
 import salt.exceptions
 from salt.utils.jinja import SaltCacheLoader as JinjaSaltCacheLoader
 from salt.utils.jinja import SerializerExtension as JinjaSerializerExtension
+from salt.utils.jinja import finalize as jinja_finalize
 from salt import __path__ as saltpath
 
 log = logging.getLogger(__name__)
@@ -123,6 +124,8 @@ def render_jinja_tmpl(tmplstr, context, tmplpath=None):
         jinja_env = jinja2.Environment(
                         undefined=jinja2.StrictUndefined, **env_args)
     jinja_env.filters['strftime'] = salt.utils.date_format
+
+    jinja_env.finalize = jinja_finalize
 
     unicode_context = {}
     for key, value in context.iteritems():
